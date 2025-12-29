@@ -20,6 +20,7 @@ Built for the **Craft Winter Challenge** 🎄
 - **Styling**: Tailwind CSS
 - **Charts**: Recharts
 - **Icons**: Lucide React
+- **Utilities**: date-fns, clsx
 - **Data Source**: Craft Space API
 
 ## Getting Started
@@ -35,7 +36,8 @@ Built for the **Craft Winter Challenge** 🎄
 1. Clone the repository:
 
    ```bash
-   cd expenses-analysis
+   git clone https://github.com/TomBener/craft-expenses-analyzer.git
+   cd craft-expenses-analyzer
    ```
 
 2. Install dependencies:
@@ -44,12 +46,14 @@ Built for the **Craft Winter Challenge** 🎄
    npm install
    ```
 
-3. Set up environment variables:
+3. (Optional) Set up environment variables for server-side API:
 
    ```bash
    # Create .env.local file
    echo "CRAFT_API_TOKEN=your_token_here" > .env.local
    ```
+
+   **Note:** The app works with mock data by default - no API setup required to try it!
 
 4. Run the development server:
 
@@ -62,30 +66,38 @@ Built for the **Craft Winter Challenge** 🎄
 ## Project Structure
 
 ```
-expenses-analysis/
+craft-expenses-analyzer/
 ├── app/
-│   ├── layout.tsx          # Root layout
-│   ├── page.tsx            # Main dashboard
-│   ├── globals.css         # Global styles
+│   ├── layout.tsx          # Root layout with theme provider
+│   ├── page.tsx            # Main dashboard page
+│   ├── globals.css         # Global styles and Tailwind
 │   └── api/
 │       └── expenses/
-│           └── route.ts    # Craft API integration
+│           └── route.ts    # Server-side API route for expenses
 ├── components/
-│   ├── Dashboard.tsx       # Main container
-│   ├── Header.tsx          # App header
-│   ├── StatsCards.tsx      # Summary stats
-│   ├── DateRangeFilter.tsx # Time period selector
-│   ├── BudgetProgress.tsx  # Budget tracking
+│   ├── Dashboard.tsx       # Main dashboard container with state management
+│   ├── Header.tsx          # App header with theme toggle
+│   ├── StatsCards.tsx      # Summary statistics cards
+│   ├── DateRangeFilter.tsx # Date range selector
+│   ├── BudgetProgress.tsx  # Budget tracking with progress bars
+│   ├── SettingsModal.tsx   # Settings modal for API configuration
 │   └── charts/
-│       ├── CategoryPieChart.tsx
-│       ├── SpendingTrendChart.tsx
-│       ├── MonthlySummary.tsx
-│       └── MerchantBar.tsx
+│       ├── CategoryPieChart.tsx   # Category breakdown pie chart
+│       ├── SpendingTrendChart.tsx # Daily spending trend line chart
+│       ├── MonthlySummary.tsx     # Monthly comparison bar chart
+│       └── MerchantBar.tsx        # Top merchants bar chart
 ├── lib/
-│   ├── craft.ts            # Craft API client
-│   ├── types.ts            # TypeScript types
-│   └── utils.ts            # Utilities
-└── package.json
+│   ├── craft.ts            # Server-side Craft API client
+│   ├── clientCraft.ts      # Client-side Craft API client
+│   ├── craftApi.ts         # Craft API fetch utilities
+│   ├── craftConfig.ts      # Configuration types and storage
+│   ├── expenseMapping.ts   # Craft data transformation
+│   ├── types.ts            # TypeScript type definitions
+│   └── utils.ts            # Helper utilities
+├── next.config.js          # Next.js configuration
+├── tailwind.config.ts      # Tailwind CSS configuration
+├── tsconfig.json           # TypeScript configuration
+└── package.json            # Dependencies and scripts
 ```
 
 ## Using Your Own Data
@@ -105,7 +117,7 @@ The app will immediately fetch and display your actual expense data!
 
 For production deployments or server-side configuration:
 
-1. Update `lib/craft.ts` with your API details:
+1. Update [lib/craft.ts](lib/craft.ts) with your API details:
 
    ```typescript
    const CRAFT_API_BASE = 'https://connect.craft.do/links/YOUR_LINK_ID/api/v1'
@@ -118,7 +130,9 @@ For production deployments or server-side configuration:
    CRAFT_API_TOKEN=your_api_token_here
    ```
 
-3. Restart the server:
+3. Update [app/api/expenses/route.ts](app/api/expenses/route.ts) to use `'server'` as the default source instead of `'mock'`
+
+4. Restart the server:
 
    ```bash
    npm run dev
@@ -167,12 +181,16 @@ This app connects to the Craft Space API to fetch expense data from a "Receipts"
 
 ## Deployment
 
-Deploy to Vercel:
+### Vercel (Recommended)
 
-1. Push to GitHub
-2. Connect repository to Vercel
-3. Add `CRAFT_API_TOKEN` as environment variable
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone)
+
+1. Push your repository to GitHub
+2. Import the repository in Vercel
+3. (Optional) Add `CRAFT_API_TOKEN` environment variable if using server-side API
 4. Deploy!
+
+The app works with mock data by default, so users can configure their own API credentials via the Settings modal after deployment.
 
 ## License
 
