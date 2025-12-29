@@ -57,7 +57,7 @@ export default function SettingsModal({ isOpen, onClose, onSave }: SettingsModal
         headers['Authorization'] = `Bearer ${normalized.apiKey}`
       }
 
-      let collectionId = normalized.collectionId
+      let collectionId: string | null = normalized.collectionId
       let collectionHint = ''
 
       if (!collectionId) {
